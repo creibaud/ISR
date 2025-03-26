@@ -16,19 +16,18 @@ class Host:
         ):
         self.name = name
         self.ip = ip
-        self.alias = alias
+        self.alias = alias if alias is not None else name
         self.snmp_community = snmp_community
         self.snmp_version = snmp_version
         self.monitoring_server = monitoring_server
         self.timezone = timezone
-        self.templates = templates if templates is not None else ["generic-active-host, generic-dummy-host, generic-passive-host"]
+        self.templates = templates if templates is not None else ["generic-active-host", "generic-dummy-host", "generic-passive-host"]
         self.service_linked_templates = service_linked_templates
 
     def create(self, centreon_username, centreon_password):
         print(f"Creating host {self.name}...")
-        create_command = f"centreon -u {centreon_username} -p {centreon_password} -o HOST -a ADD -v \"{self.name};"
-        create_command += f"{self.alias}" if self.alias else f"{self.name}"
-        create_command += f";{self.ip};"
+        create_command = f"centreon -u {centreon_username} -p {centreon_password} -o HOST -a ADD -v \"{self.name};{self.alias};"
+        create_command += f"{self.ip};"
         
         for i, template in enumerate(self.templates):
             create_command += f"{template}"
@@ -94,9 +93,9 @@ def create_hosts(username, password, ip_range, snmp_community, snmp_version, mon
 
     ips = generate_ips(ip_range)
 
-    for ip in ips:
+    for i, ip in enumerate(ips):
         host = Host(
-            name=ip,
+            name=f"Host-{i}",
             ip=ip,
             snmp_community=snmp_community,
             snmp_version=snmp_version,
