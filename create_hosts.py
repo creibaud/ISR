@@ -32,7 +32,7 @@ class Host:
         for i, template in enumerate(self.templates):
             create_command += f"{template}"
             if i < len(self.templates) - 1:
-                create_command += "**"
+                create_command += "|"
             
         create_command += f";{self.monitoring_server};Linux\""
 
