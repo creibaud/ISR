@@ -11,8 +11,7 @@ class Host:
             snmp_version="2c",
             monitoring_server="Central",
             timezone="Europe/Paris",
-            templates=["generic-active-host", "generic-dummy-host", "generic-passive-host"],
-            service_linked_templates=False
+            templates=["generic-active-host", "generic-dummy-host", "generic-passive-host"]
         ):
         self.name = name
         self.ip = ip
@@ -22,7 +21,6 @@ class Host:
         self.monitoring_server = monitoring_server
         self.timezone = timezone
         self.templates = templates
-        self.service_linked_templates = service_linked_templates
 
     def create(self, centreon_username, centreon_password):
         print(f"Creating host {self.name}...")
@@ -48,9 +46,6 @@ class Host:
 
         for param in params:
             commands.append(f"centreon -u {centreon_username} -p {centreon_password} -o HOST -a SETPARAM -v {param}")
-
-        if self.service_linked_templates:
-            commands.append(f"centreon -u {centreon_username} -p {centreon_password} -o HOST -a APPLYTPL -v \"{self.name};\"")
 
         for command in commands:
             try:
@@ -87,8 +82,7 @@ def generate_ips(ip_range):
 @click.option("--monitoring-server", "-m", help="Monitoring server", required=False, type=str, default="Central")
 @click.option("--timezone", "-t", help="Timezone", required=False, type=str, default="Europe/Paris")
 @click.option("--templates", "-T", help="Templates", required=False, type=str, default="generic-active-host,generic-dummy-host,generic-passive-host")
-@click.option("--service-linked-templates", "-s", help="Service linked templates", is_flag=True)
-def create_hosts(username, password, ip_range, snmp_community, snmp_version, monitoring_server, timezone, templates, service_linked_templates):
+def create_hosts(username, password, ip_range, snmp_community, snmp_version, monitoring_server, timezone, templates):
     print("Creating hosts...")
 
     ips = generate_ips(ip_range)
@@ -101,8 +95,7 @@ def create_hosts(username, password, ip_range, snmp_community, snmp_version, mon
             snmp_version=snmp_version,
             monitoring_server=monitoring_server,
             timezone=timezone,
-            templates=templates.split(",") if templates else None,
-            service_linked_templates=service_linked_templates
+            templates=templates.split(",") if templates else None
         )
         host.create(username, password)
 
