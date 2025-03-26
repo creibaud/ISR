@@ -34,7 +34,7 @@ class Host:
             if i < len(self.templates) - 1:
                 create_command += "**"
             
-        create_command += f";{self.monitoring_server};\""
+        create_command += f";{self.monitoring_server};Linux\""
 
         commands = [create_command]
 
