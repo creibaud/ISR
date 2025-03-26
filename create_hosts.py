@@ -11,7 +11,7 @@ class Host:
             snmp_version="2c",
             monitoring_server="Central",
             timezone="Europe/Paris",
-            templates=None,
+            templates=["generic-active-host", "generic-dummy-host", "generic-passive-host"],
             service_linked_templates=False
         ):
         self.name = name
@@ -21,7 +21,7 @@ class Host:
         self.snmp_version = snmp_version
         self.monitoring_server = monitoring_server
         self.timezone = timezone
-        self.templates = templates if templates is not None else ["generic-active-host", "generic-dummy-host", "generic-passive-host"]
+        self.templates = templates
         self.service_linked_templates = service_linked_templates
 
     def create(self, centreon_username, centreon_password):
@@ -82,12 +82,12 @@ def generate_ips(ip_range):
 @click.option("--username", "-u", help="Centreon username", required=True, type=str)
 @click.option("--password", "-p", help="Centreon password", required=True, type=str)
 @click.option("--ip-range", "-r", help="IP range to scan (192.168.1.10,192.168.1.50)", required=True, type=str)
-@click.option("--snmp-community", "-c", help="SNMP community", required=False, type=str)
-@click.option("--snmp-version", "-v", help="SNMP version", required=False, type=str)
-@click.option("--monitoring-server", "-m", help="Monitoring server", required=False, type=str)
-@click.option("--timezone", "-t", help="Timezone", required=False, type=str)
-@click.option("--templates", "-T", help="Templates", required=False, type=str)
-@click.option("--service-linked-templates", "-s", help="Service linked templates", required=False, type=bool)
+@click.option("--snmp-community", "-c", help="SNMP community", required=False, type=str, default="public")
+@click.option("--snmp-version", "-v", help="SNMP version", required=False, type=str, default="2c")
+@click.option("--monitoring-server", "-m", help="Monitoring server", required=False, type=str, default="Central")
+@click.option("--timezone", "-t", help="Timezone", required=False, type=str, default="Europe/Paris")
+@click.option("--templates", "-T", help="Templates", required=False, type=str, default="generic-active-host,generic-dummy-host,generic-passive-host")
+@click.option("--service-linked-templates", "-s", help="Service linked templates", required=False, type=bool, default=False)
 def create_hosts(username, password, ip_range, snmp_community, snmp_version, monitoring_server, timezone, templates, service_linked_templates):
     print("Creating hosts...")
 
