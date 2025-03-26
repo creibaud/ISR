@@ -54,22 +54,21 @@ class Host:
             except subprocess.CalledProcessError as e:
                 print(f"Error while executing command: {e}")
 
+def ip_to_int(ip):
+    return int(''.join([bin(int(x)+256)[3:] for x in ip.split('.')]), 2)
+
+def int_to_ip(num):
+        return '.'.join([str(num >> (8 * i) & 255) for i in range(3, -1, -1)])
+
 def generate_ips(ip_range):
     ip_range = ip_range.split(",")
     ip_start = ip_range[0]
     ip_end = ip_range[1]
 
-    ip_start = ip_start.split(".")
-    ip_end = ip_end.split(".")
-    ip_start = list(map(int, ip_start))
-    ip_end = list(map(int, ip_end))
+    start = ip_to_int(ip_start)
+    end = ip_to_int(ip_end)
 
-    ips = []
-    for i in range(ip_start[0], ip_end[0] + 1):
-        for j in range(ip_start[1], ip_end[1] + 1):
-            for k in range(ip_start[2], ip_end[2] + 1):
-                for l in range(ip_start[3], ip_end[3] + 1):
-                    ips.append(f"{i}.{j}.{k}.{l}")
+    ips = [int_to_ip(i) for i in range(start, end + 1)]
 
     return ips
 
