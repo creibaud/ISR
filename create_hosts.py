@@ -87,7 +87,7 @@ def generate_ips(ip_range):
 @click.option("--monitoring-server", "-m", help="Monitoring server", required=False, type=str, default="Central")
 @click.option("--timezone", "-t", help="Timezone", required=False, type=str, default="Europe/Paris")
 @click.option("--templates", "-T", help="Templates", required=False, type=str, default="generic-active-host,generic-dummy-host,generic-passive-host")
-@click.option("--service-linked-templates", "-s", help="Service linked templates", required=False, type=bool, default=False)
+@click.toggle("--service-linked-templates", "-s", help="Apply service linked templates", default=False)
 def create_hosts(username, password, ip_range, snmp_community, snmp_version, monitoring_server, timezone, templates, service_linked_templates):
     print("Creating hosts...")
 
