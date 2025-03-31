@@ -1,4 +1,4 @@
-$dateFilePath = "$HOME/Documents/date.txt"
+$dateFilePath = "C:\date.txt"
 
 $todayDate = (Get-Date).ToString("dd/MM/yyyy")
 
